@@ -13,9 +13,7 @@ class CellStrategyNormal extends Component {
   }
 
   onButtonPress = () => {
-    const { rowNumber, colNumber } = this.props;
     this.setState({ isPicked: true });
-    alert(`${rowNumber}, ${colNumber}`);
   }
 
   render() {

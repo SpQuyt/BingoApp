@@ -3,12 +3,14 @@ import {
   Text, TouchableOpacity, View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { addNumber } from 'src/datalayers/actions/table.action';
+import { addNumber, resetTable } from 'datalayers/actions/table.action';
 import styles from './styles';
 
 class CellStrategyEmpty extends Component {
   onButtonPress = () => {
-    const { rowNumber, colNumber, addNumber } = this.props;
+    const {
+      rowNumber, colNumber, addNumber,
+    } = this.props;
     addNumber(rowNumber, colNumber);
   }
 
@@ -36,10 +38,13 @@ class CellStrategyEmpty extends Component {
   }
 }
 
-const mapStateToProps = null;
+const mapStateToProps = (state) => ({
+  currentNumberToFill: state.table.currentNumberToFill,
+});
 
 const mapDispatchToProps = {
   addNumber,
+  resetTable,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CellStrategyEmpty);

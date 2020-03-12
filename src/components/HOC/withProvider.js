@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
-import store from 'src/datalayers/stores';
+import store from 'datalayers/stores';
 
 const withProvider = (WrappedComponent) => {
   function Wrapper() {

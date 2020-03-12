@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import NavigationWithoutProps from 'src/utils/NavigationWithoutProps';
-import withProvider from 'src/components/HOC/withProvider';
-import Stack from 'src/components/Navigator';
+import NavigationWithoutProps from 'utils/NavigationWithoutProps';
+import withProvider from 'components/HOC/withProvider';
+import Stack from 'components/Navigator';
 
 console.disableYellowBox = true;
 

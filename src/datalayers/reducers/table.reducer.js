@@ -1,14 +1,10 @@
-import { tableAction } from 'src/constants/actions';
+import { tableAction } from 'constants/actions';
+import { TABLE_SIZE } from 'constants/sizes';
+import ArrayHandler from 'utils/arrays';
 
 export const INITIAL_STATE = {
   currentNumberToFill: 1,
-  tableArray: [
-    [null, null, null, null, null],
-    [null, null, null, null, null],
-    [null, null, null, null, null],
-    [null, null, null, null, null],
-    [null, null, null, null, null],
-  ],
+  tableArray: ArrayHandler.createEmptyTableArray(),
   coordinationArray: [],
 };
 
@@ -23,18 +19,52 @@ export default (state = INITIAL_STATE, action) => {
           state.coordinationArray.push({ rowNumber, colNumber });
           return state.currentNumberToFill;
         }
-        // If the previous tableArray's cell has a value in it, skip to another cell
-        if (state.tableArray[rowNumber][colNumber] !== null) {
-          return state.tableArray[rowNumber][colNumber];
-        }
-        // Otherwise remains null
-        return null;
+        // Otherwise remains value of normal cells
+        return state.tableArray[rowNumber][colNumber];
       }));
       return {
         ...state,
         tableArray: newTableArray,
         currentNumberToFill: state.currentNumberToFill + 1,
         coordinationArray: state.coordinationArray,
+      };
+    }
+
+    case tableAction.RESET_TABLE: {
+      return {
+        ...INITIAL_STATE,
+      };
+    }
+
+    case tableAction.GO_BACK_NUMBER: {
+      if (state.coordinationArray.length > 0) {
+        // Pop out the last item of coorArray and capture it
+        const lastItem = state.coordinationArray.pop();
+        const newTableArray = state.tableArray.map((row, rowNumber) => row.map((col, colNumber) => {
+          // Finding the correct rowNumber and colNumber to return null
+          if (rowNumber === lastItem.rowNumber && colNumber === lastItem.colNumber) {
+            return null;
+          }
+          // Otherwise remains value of normal cells
+          return state.tableArray[rowNumber][colNumber];
+        }));
+        return {
+          ...state,
+          tableArray: newTableArray,
+          currentNumberToFill: state.currentNumberToFill - 1,
+          coordinationArray: state.coordinationArray,
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+
+    case tableAction.RANDOM_TABLE: {
+      return {
+        ...state,
+        tableArray: ArrayHandler.createRandomTableArray(),
+        currentNumberToFill: state.currentNumberToFill + TABLE_SIZE * TABLE_SIZE,
       };
     }
 

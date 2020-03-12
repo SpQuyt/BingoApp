@@ -1,33 +1,47 @@
 import React, { Component } from 'react';
 import {
-  Text, View, StyleSheet, TouchableOpacity,
+  Text, View, TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
-import NavigationWithoutProps from 'src/utils/NavigationWithoutProps';
-import TableStrategyEmpty from 'src/components/Common/Table/TableStrategyEmpty';
-import { TABLE_SIZE } from 'src/constants/sizes';
+import TableStrategyEmpty from 'components/Common/Table/TableStrategyEmpty';
+import { resetTable, goBackCell, randomTable } from 'datalayers/actions/table.action';
+import { TABLE_SIZE } from 'constants/sizes';
 import styles from './styles';
 
-// const data = [
-//   [5, 1, 2, 3, 6],
-//   [7, 1, 25, 3, 9],
-//   [4, 1, 22, 9, 4],
-//   [3, 1, 15, 3, 0],
-//   [0, 1, 7, 2, 4],
-// ];
-
 class CreateTable extends Component {
+  onGoBack = () => {
+    const { goBackCell } = this.props;
+    goBackCell();
+  }
+
+  onResetTable = () => {
+    const { resetTable } = this.props;
+    resetTable();
+  }
+
+  onRandom = () => {
+    const { randomTable } = this.props;
+    randomTable();
+  }
+
   render() {
     const { tableArray } = this.props;
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.screen}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={this.onResetTable} style={styles.button}>
+              <Text>Reset All</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.onRandom} style={styles.button}>
+              <Text>Random Table</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.onGoBack} style={styles.button}>
+              <Text>Back 1 Cell</Text>
+            </TouchableOpacity>
+          </View>
           <TableStrategyEmpty tableSize={TABLE_SIZE} data={tableArray} />
-          <Text>This is a CreateTable screen.</Text>
-          <TouchableOpacity onPress={() => NavigationWithoutProps.navigate('PlayGame')}>
-            <Text>Go to PlayGame</Text>
-          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -36,8 +50,13 @@ class CreateTable extends Component {
 
 const mapStateToProps = (state) => ({
   tableArray: state.table.tableArray,
+  currentNumberToFill: state.table.currentNumberToFill,
 });
 
-const mapDispatchToProps = null;
+const mapDispatchToProps = {
+  resetTable,
+  goBackCell,
+  randomTable,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTable);

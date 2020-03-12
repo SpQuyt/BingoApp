@@ -1,7 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import CreateTable from 'src/components/CreateTable/CreateTable';
-import PlayGame from 'src/components/PlayGame/PlayGame';
+import CreateTable from 'components/CreateTable/CreateTable';
+import PlayGame from 'components/PlayGame/PlayGame';
 
 const Stack = createAppContainer(
   createStackNavigator(

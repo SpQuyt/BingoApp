@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
 } from 'react-native';
-import { TABLE_WIDTH } from 'src/constants/sizes';
-import CellStrategyNormal from 'src/components/Common/Table/Cell/CellStrategyNormal';
+import { TABLE_WIDTH } from 'constants/sizes';
+import CellStrategyNormal from 'components/Common/Table/Cell/CellStrategyNormal';
 import styles from './styles';
 
 class TableStrategyNormal extends Component {

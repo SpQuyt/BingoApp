@@ -37,11 +37,11 @@ exec(command, (err, stdout) => {
     log(
       c.yellow('Run ')
       + c.green('npm run lint:fix')
-      + c.yellow(' to auto-fix problems.')
+      + c.yellow(' to auto-fix problems.'),
     );
     log(
       c.yellow('Please double-check the changes after auto-fixing, then run ')
-      + c.green('git add .\n')
+      + c.green('git add .\n'),
     );
     process.exit(1);
   }
@@ -52,7 +52,7 @@ exec(command, (err, stdout) => {
     log(
       c.yellow('Run ')
       + c.green('npm run lint:warn')
-      + c.yellow(' to check warnings if needed.')
+      + c.yellow(' to check warnings if needed.'),
     );
   }
   process.exit(0);

@@ -3,7 +3,7 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       alias: {
-        src: './src/',
+        src: './src',
       },
     }],
   ],
