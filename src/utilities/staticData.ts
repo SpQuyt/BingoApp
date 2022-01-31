@@ -1,3 +1,6 @@
+import Metrics from 'assets/metrics';
+import { scale } from 'react-native-size-matters';
+
 export const staticValue = {
     DEFAULT: 1,
     TIME_IMAGE_LOAD: 500,
@@ -20,3 +23,6 @@ export const dataPicker = [
     'label9',
     'label10',
 ];
+
+export const NUM_OF_CELLS = 25;
+export const BOARD_WIDTH = Metrics.screenWidth - scale(20);

@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-console */
 import AsyncStorage from '@react-native-community/async-storage';
 import AlertMessage from 'components/base/AlertMessage';
@@ -7,6 +8,9 @@ import Picker from 'react-native-picker';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import codePush from 'react-native-code-push';
 import Config from 'react-native-config';
+import { scale } from 'react-native-size-matters';
+import { BOARD_WIDTH } from './staticData';
+import { ICellData } from './interfaces';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -73,4 +77,100 @@ export const getCodePushInfo = () => {
                     : Config.CODEPUSH_IOS_DEVELOPMENT_KEY,
         });
     }
+};
+
+export const getPropsFromNumOfCells = (numOfCells: number) => {
+    return {
+        cellSize: BOARD_WIDTH / Math.floor(Math.sqrt(numOfCells)),
+        cellTextFontSize: scale(25 - Math.floor(Math.sqrt(numOfCells))),
+    };
+};
+
+export const generateFakeBoardData = (numOfCells: number) => {
+    // In case value is 0, we set default value to 1
+    const numOfCellsEachEdge = Math.floor(Math.sqrt(numOfCells)) || 1;
+    const unShuffled = [];
+    for (let i = 0; i < numOfCells; i++) {
+        unShuffled.push({
+            value: i + 1,
+            isChosen: false,
+        });
+    }
+    const shuffled = unShuffled
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }, index) => {
+            return {
+                ...value,
+                col: Math.floor(index / numOfCellsEachEdge),
+                row: index % numOfCellsEachEdge,
+            };
+        });
+    return shuffled;
+};
+
+const checkVerticalLines = (boardData: Array<ICellData>) => {
+    const numOfCellsEachEdge = Math.floor(Math.sqrt(boardData.length)) || 1;
+    for (let colIndex = 0; colIndex < numOfCellsEachEdge; colIndex++) {
+        const isTrueEachStepArr: Array<ICellData> = [];
+        for (let rowIndex = 0; rowIndex < numOfCellsEachEdge; rowIndex++) {
+            const currentItem = boardData.find((boardItem) => boardItem.row === rowIndex && boardItem.col === colIndex);
+            if (currentItem?.isChosen) {
+                isTrueEachStepArr.push(currentItem);
+            }
+        }
+        if (isTrueEachStepArr?.length === numOfCellsEachEdge) {
+            return isTrueEachStepArr;
+        }
+    }
+    return undefined;
+};
+
+const checkHorizontalLines = (boardData: Array<ICellData>) => {
+    const numOfCellsEachEdge = Math.floor(Math.sqrt(boardData.length)) || 1;
+    for (let rowIndex = 0; rowIndex < numOfCellsEachEdge; rowIndex++) {
+        const isTrueEachStepArr: Array<ICellData> = [];
+
+        for (let colIndex = 0; colIndex < numOfCellsEachEdge; colIndex++) {
+            const currentItem = boardData.find((boardItem) => boardItem.row === rowIndex && boardItem.col === colIndex);
+            if (currentItem?.isChosen) {
+                isTrueEachStepArr.push(currentItem);
+            }
+        }
+        if (isTrueEachStepArr?.length === numOfCellsEachEdge) {
+            return isTrueEachStepArr;
+        }
+    }
+    return undefined;
+};
+
+const checkDiagonalLines = (boardData: Array<ICellData>) => {
+    const numOfCellsEachEdge = Math.floor(Math.sqrt(boardData.length)) || 1;
+    const isFirstDiagonTrueEachStepArr: Array<ICellData> = [];
+    const isSecondDiagonTrueEachStepArr: Array<ICellData> = [];
+    for (let rowIndex = 0; rowIndex < numOfCellsEachEdge; rowIndex++) {
+        const currentItem = boardData.find((boardItem) => boardItem.row === rowIndex && boardItem.col === rowIndex);
+        if (currentItem?.isChosen) {
+            isFirstDiagonTrueEachStepArr.push(currentItem);
+        }
+    }
+    if (isFirstDiagonTrueEachStepArr?.length === numOfCellsEachEdge) return isFirstDiagonTrueEachStepArr;
+    for (let rowIndex = numOfCellsEachEdge - 1; rowIndex > 0; rowIndex--) {
+        const currentItem = boardData.find((boardItem) => boardItem.row === rowIndex && boardItem.col === rowIndex);
+        if (currentItem?.isChosen) {
+            isSecondDiagonTrueEachStepArr.push(currentItem);
+        }
+    }
+    if (isSecondDiagonTrueEachStepArr?.length === numOfCellsEachEdge) return isSecondDiagonTrueEachStepArr;
+    return undefined;
+};
+
+export const checkWinningConditions = (boardData: Array<ICellData>) => {
+    const resultVertical = checkVerticalLines(boardData);
+    if (resultVertical) return resultVertical;
+    const resultHorizontal = checkHorizontalLines(boardData);
+    if (resultHorizontal) return resultHorizontal;
+    const resultDiagonal = checkDiagonalLines(boardData);
+    if (resultDiagonal) return resultDiagonal;
+    return undefined;
 };

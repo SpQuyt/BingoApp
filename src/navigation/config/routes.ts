@@ -12,11 +12,7 @@ const APP_ROUTE = {
 
 const HOME_ROUTE = {
     ROOT: 'HOME_ROOT',
-    HOME: 'HOME',
-    HOME_DETAIL: 'HOME_DETAIL',
-    WEB_VIEW: 'WEB_VIEW',
-    HOME_DATA: 'HOME_DATA',
-    HOME_USER_LIST: 'HOME_USER_LIST',
+    PLAY: 'PLAY',
 };
 
 const SETTING_ROUTE = {

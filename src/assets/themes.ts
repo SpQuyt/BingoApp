@@ -19,6 +19,7 @@ const Light = {
         backgroundModalUpdate: '#323232',
         backdropModalUpdate: '#00000071',
         progressUpdateColor: '#28A696',
+        winning: '#ff0000',
     },
     FONTS: {
         defaultFont: 'Montserrat-Regular',
